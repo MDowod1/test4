@@ -1,0 +1,400 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9 url("images/pattern.png") repeat;
+  background-size: 120px 120px; /* dopasuj wielkość kratki */
+  background-blend-mode: multiply; /* lekko przyciemnia wzór */
+}
+
+/* Pasek górny */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 0 15px;
+  background-color: #fff;
+  border-bottom: none;
+}
+
+.topbar .back-button {
+  display: flex;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #007aff;
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.topbar .back-button::before {
+  content: "<";
+  font-size: 24px;
+  font-weight: 600;
+  margin-right: 5px;
+  transform: translateY(-2px) scaleX(0.7);
+  display: inline-block;
+}
+
+.topbar .title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  font-weight: bold;
+  color: #000;
+  text-transform: capitalize;
+}
+
+/* Godło + flaga */
+.state {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  height: 40px;
+  overflow: visible;
+}
+
+.eagle img {
+  width: 42px;
+  height: 55px;
+  display: block;
+}
+
+.eagle {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.country {
+  font-family: "Times New Roman", serif;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.flag img {
+  height: 40px;
+  width: 70px;
+  display: block;
+  border-radius: 0;
+  background-color: #fdfdfd;
+}
+
+/* Nr legitymacji */
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 14px;
+  position: relative;
+  top: 0.3cm;
+}
+
+.bold { font-weight: bold }
+
+/* Zielona karta */
+.card {
+  margin: 10px 16px 0;
+  width: calc(100% - 32px);
+  height: 210px;
+  background: url("images/school_plate.png") no-repeat center;
+  background-size: 100% 100%;
+  position: relative;
+  border-radius: 16px;
+  top: 0.3cm;
+}
+
+.card .photo {
+  position: absolute;
+  top: 2.5px;
+  left: 11px;
+  width: 100px;
+  height: 148px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card .photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card .info-block {
+  position: absolute;
+  top: 2px;
+  left: 130px;
+  right: 20px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.card .full-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 2px 0;
+}
+
+.card .role {
+  font-size: 13px;
+  width: 44px;
+  height: 18px;
+  font-weight: 800;
+  color: #158a79;
+  background: #fff;
+  padding: 3px 10px;
+  border-radius: 14px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.card .field { margin-bottom: 2px; }
+
+.card .label {
+  display: block;
+  font-size: 11px;
+  color: #ddd;
+  font-weight: normal;
+  line-height: 1.1;
+  margin-bottom: 1px;
+}
+
+.card .value {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.card .age {
+  position: absolute;
+  bottom: 65px;
+  right: 12px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* tekst w białej ramce */
+.card .valid-inside {
+  position: absolute;
+  bottom: 10px;   /* dopasuj, żeby trafiło w biały prostokąt */
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: #158a79; /* zielony jak na zdjęciu */
+}
+
+.card .valid-inside {
+  position: absolute; 
+  /* usuń justify-content i inne ograniczenia */
+  display: flex;
+  align-items: center;
+  font-size: 27px;
+  font-weight: bold; /* Pogrubienie */
+  color: #158a79;
+  
+  /* --- TUTAJ dopasowujesz ręcznie --- */
+  bottom: 12.5px;  /* odległość od dołu */
+  left: 50px;    /* odległość od lewej */
+}
+
+/* odstęp między ✔ i napisem */
+.card .valid-inside span {
+  margin-left: 6px;
+}
+
+.card .valid-inside .right {
+  text-align: right;
+  font-size: 12px;
+}
+
+/* Sekcja szkoły */
+.section {
+  margin: 30px 16px 0;
+  background: #fff;
+  border-radius: 30px;
+  padding: 4px 16px;
+  font-weight: 800;
+  color: #158a79;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.section.active { border-radius: 30px 30px 0 0; }
+.section:hover { background: #f9f9f9; }
+
+.section #arrow {
+  font-size: 26px;
+  color: #158a79;
+  transition: transform 0.3s ease;
+}
+
+.section-content {
+  margin: 0 16px;
+  background: #fff;
+  border-radius: 0 0 30px 30px;
+  padding: 0 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #000;
+  border-top: 1px solid #ddd;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  
+}
+
+.school-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 400;
+  color: #000;
+}
+
+.school-line .green-number {
+  color: #158a79;
+  text-decoration: underline;
+}
+
+.section-content.show {
+  max-height: 500px;
+  padding: 12px;
+  border-radius: 0 0 16px 16px;
+}
+
+.section.active #arrow { transform: rotate(180deg); }
+
+.info {
+  margin: -4px 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+  line-height: 1.2;
+  padding-left: 12px;
+}
+
+/* Topbar – wersja fixed */
+.topbar_fixed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.back_action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.back_img_fixed {
+  width: 24px;
+  height: 24px;
+}
+
+.back_text_fixed {
+  color: #0b63a3;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.title_text_fixed {
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  flex: 1;
+}
+
+/* Pasek dolny */
+.footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+}
+
+.footer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #777;
+  text-decoration: none;
+}
+
+.footer-item img {
+  width: 22px;
+  height: 22px;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+.footer-item i {
+  font-size: 28px;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.footer-item:active i {
+  color: #158a79;
+  transform: scale(1.2);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.role.uczen { width: 44px; }
+.role.uczennica { width: 75px; }
+
+.label {
+  font-family: "Arial", sans-serif;
+  font-weight: normal;
+  color: #fff;
+  font-size: 12px;
+}
+
+.value {
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #fff;
+}
+
+.pesel-section { margin-top: 2px; }
+
