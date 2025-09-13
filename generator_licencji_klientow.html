@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator licencji</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+  <div class="bg-gray-800 p-6 rounded-2xl w-full max-w-md">
+    <h1 class="text-xl font-bold mb-4">Generator licencji (Admin)</h1>
+
+    <button id="generateBtn" class="bg-red-600 hover:bg-red-700 px-4 py-3 rounded-xl font-semibold w-full">Wygeneruj licencję</button>
+    <button id="clearBtn" class="bg-gray-600 hover:bg-gray-700 px-4 py-3 rounded-xl font-semibold w-full mt-2">Wyczyść dane</button>
+
+    <div id="newLicense" class="mt-4 text-center text-lg font-mono"></div>
+
+    <h2 class="text-lg font-semibold mt-6 mb-2">Wygenerowane licencje:</h2>
+    <ul id="licenseList" class="list-disc pl-5 space-y-1 text-sm"></ul>
+  </div>
+
+  <script>
+    const btn = document.getElementById("generateBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const output = document.getElementById("newLicense");
+    const list = document.getElementById("licenseList");
+
+    // pobierz już zapisane licencje lub utwórz pustą tablicę
+    let licenses = JSON.parse(localStorage.getItem("allLicenses") || "[]");
+
+    // funkcja do aktualizacji listy
+    function updateList() {
+      list.innerHTML = "";
+      licenses.forEach((lic, i) => {
+        const li = document.createElement("li");
+        li.textContent = lic;
+        list.appendChild(li);
+      });
+    }
+
+    updateList();
+
+    btn.addEventListener("click", () => {
+      // prosty generator kodu licencji
+      const kod = "LICENCJA-" + Math.floor(1000 + Math.random() * 9000);
+
+      // zapisz licencję w globalnym localStorage
+      licenses.push(kod);
+      localStorage.setItem("allLicenses", JSON.stringify(licenses));
+
+      // ustaw jako aktualna aktywna licencja (dla dashboard)
+      localStorage.setItem("activeLicense", kod);
+
+      output.textContent = "Nowa licencja: " + kod;
+
+      updateList();
+    });
+    btn.addEventListener("click", () => {
+    // ... (istniejący kod) ...
+    });
+
+    // Dodaj ten nowy blok:
+    clearBtn.addEventListener("click", () => {
+    // Krok 1: Wyzeruj tablicę 'licenses'
+    licenses = [];
+
+    // Krok 2: Usuń zapisane dane z pamięci przeglądarki (localStorage)
+    localStorage.removeItem("allLicenses");
+    localStorage.removeItem("activeLicense");
+    localStorage.removeItem("currentLicense");
+
+    // Krok 3: Wywołaj funkcję aktualizującą listę
+    updateList();
+
+    // Krok 4: Wyczyść komunikat o ostatniej wygenerowanej licencji
+    output.textContent = "";
+    });
+  </script>
+</body>
+</html>

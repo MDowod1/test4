@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Edytuj dane licencji</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="theme-color" content="#0f0f23">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 30%, #2d1b69 70%, #0f0f23 100%);
+            min-height: 100vh;
+        }
+        
+        .form-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            outline: none;
+        }
+        
+        .input-field:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+        }
+        
+        .section-header {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .image-preview {
+            transition: all 0.3s ease;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+        }
+        
+        .image-preview:hover {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        
+        .label-text {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white">
+    <div class="min-h-screen py-8 px-4">
+        <!-- Header -->
+        <div class="max-w-2xl mx-auto mb-8 text-center fade-in">
+            <div class="mb-4">
+                <div class="w-16 h-16 mx-auto bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </div>
+            </div>
+            <h1 class="text-2xl font-bold mb-2">Edycja danych dokumentu</h1>
+            <p class="text-indigo-200 text-sm">Licencja: <span class="font-mono text-red-400">PREMIUM</span></p>
+        </div>
+
+        <!-- Form -->
+        <div class="max-w-2xl mx-auto">
+            <form method="POST" enctype="multipart/form-data" class="form-card rounded-2xl p-6 fade-in">
+                
+                <!-- Dane osobowe -->
+                <div class="section-header rounded-lg p-3 mb-6">
+                    <h2 class="text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                        </svg>
+                        Dane osobowe
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                            <label class='block mb-2 text-sm label-text required-field'>Imię (Imiona)</label>
+                            <input type='text' name='first_name' value=''  required
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text required-field'>Nazwisko</label>
+                            <input type='text' name='last_name' value=''  required
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text required-field'>PESEL</label>
+                            <input type='text' name='pesel' value='' maxlength='11' pattern='\d{11}' required
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text required-field'>Data urodzenia</label>
+                            <input type='date' name='birth_date' value=''  required
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div>                    
+                    <div>
+                        <label class="block mb-2 text-sm label-text required-field">Płeć</label>
+                        <select name="gender" class="w-full input-field text-white p-3 rounded-lg" required>
+                            <option value="">Wybierz płeć</option>
+                            <option value="M" selected>Mężczyzna</option>
+                            <option value="K" >Kobieta</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 text-sm label-text required-field">Seria i numer</label>
+                        <div class="flex gap-2">
+                            <input type="text" name="document_number" id="document_number"
+                                value=""
+                                maxlength="10" pattern="^[A-Z]{4} [0-9]{5}$" placeholder="MXXX 12345"
+                                class="flex-1 input-field text-white p-3 rounded-lg uppercase" required>
+                            <button type="button" onclick="generateSeries()"
+                                    class="btn-secondary px-4 py-3 rounded-lg font-semibold text-white">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Numer dowodu osobistego -->
+                <div class="mb-6">
+                <label class="block mb-2 text-sm label-text required-field">Numer dowodu osobistego</label>
+                <div class="flex gap-2">
+                    <input type="text"
+                        name="dow_number"
+                        id="dow_number"
+                        value=""
+                        class="flex-1 input-field text-white p-3 rounded-lg uppercase"
+                        maxlength="10"
+                        pattern="^[A-Z]{3}\s[0-9]{6}$"
+                        placeholder="ZZC 108231"
+                        required>
+                    <button type="button"
+                            onclick="generateDowNumber()"
+                            class="btn-secondary px-4 py-3 rounded-lg font-semibold text-white"
+                            title="Wygeneruj numer dowodu">
+                    <!-- ikonka „refresh”/„generate” -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v6h6M20 20v-6h-6M5 19A9 9 0 0119 5"/>
+                    </svg>
+                    </button>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">Format: trzy litery, spacja, sześć cyfr (np. ZZC 108231)</p>
+                </div>
+                <script>
+                function generateDowNumber() {
+                const L = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const letters = Array.from({length: 3}, () => L[Math.floor(Math.random()*L.length)]).join('');
+                const numbers = Math.floor(100000 + Math.random() * 900000); // 6 cyfr, bez zer wiodących
+                const out = `${letters} ${numbers}`;
+                const input = document.getElementById('dow_number');
+                if (input) {
+                    input.value = out;
+                    input.dispatchEvent(new Event('input')); // gdybyś miał walidacje/maszyny
+                }
+                }
+                </script>
+
+
+                <!-- Dane rodziców -->
+                <div class="section-header rounded-lg p-3 mb-6">
+                    <h2 class="text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Dane rodziców
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                            <label class='block mb-2 text-sm label-text '>Imię ojca</label>
+                            <input type='text' name='father_name' value=''  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text '>Nazwisko rodowe ojca</label>
+                            <input type='text' name='father_lastname' value=''  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text '>Imię matki</label>
+                            <input type='text' name='mother_name' value=''  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text '>Nazwisko rodowe matki</label>
+                            <input type='text' name='mother_maiden_name' value=''  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div>                </div>
+
+                <div class="mb-6">
+                    <div>
+                            <label class='block mb-2 text-sm label-text '>Miejsce urodzenia</label>
+                            <input type='text' name='birth_place' value='GDAŃSK'  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div>                </div>
+
+                <!-- Adres zameldowania -->
+                <div class="section-header rounded-lg p-3 mb-6">
+                    <h2 class="text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Adres zameldowania
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                            <label class='block mb-2 text-sm label-text '>Kraj</label>
+                            <input type='text' name='country' value='POLSKA'  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text '>Ulica i numer</label>
+                            <input type='text' name='address' value=''  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text '>Kod pocztowy</label>
+                            <input type='text' name='postal_code' value='' pattern='[0-9]{2}-[0-9]{3}' placeholder='00-000' 
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text '>Miejscowość</label>
+                            <input type='text' name='city' value=''  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div><div>
+                            <label class='block mb-2 text-sm label-text '>Data zameldowania</label>
+                            <input type='date' name='registration_date' value='2014-07-26'  
+                                class='w-full input-field text-white p-3 rounded-lg'>
+                        </div>                </div>
+
+                <!-- Dane Dowodu -->
+                <div class="section-header rounded-lg p-3 mb-6">
+                    <h2 class="text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm3 2a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                        </svg>
+                        Dane dokumentu
+                    </h2>
+                </div>
+
+                
+                <div class="mb-6">
+                    <label class="block mb-2 text-sm label-text required-field">Data wydania</label>
+                    <input type="date" name="issue_date" id="issue_date"
+                        value="2025-09-04" required
+                        class="w-full input-field text-white p-3 rounded-lg">
+                </div>
+
+                <input type="hidden" name="expiry_date" id="expiry_date" value="2035-09-04">
+
+                <!-- Klucz edycji -->
+                
+                <!-- Zdjęcie dokumentu -->
+                <div class="section-header rounded-lg p-3 mb-6">
+                    <h2 class="text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                        </svg>
+                        Zdjęcie dokumentu
+                    </h2>
+                </div>
+
+                <div class="mb-6">
+                    <div id="imagePreviewWrapper" class="mb-4">
+                         <div class="image-preview rounded-lg p-4 text-center">
+                            <img id="imagePreview" src="#" alt="Podgląd zdjęcia" class="rounded-lg max-h-48 mx-auto border border-gray-600 hidden">
+                            <p id="previewText" class="text-sm text-gray-400 mt-2">Podgląd zdjęcia</p>
+                         </div>
+                    </div>
+                    <input type="file" name="photo" accept="image/*" id="file_input"
+                         class="w-full input-field text-white p-3 rounded-lg">
+                     </div>
+                    
+                    <div class="mt-2 text-xs text-gray-400 bg-green-500 bg-opacity-10 border border-green-500 border-opacity-30 rounded-lg p-3">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-green-300">✅ Zmieniając dane - Akceptujesz regulamin i zasady prywatości</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary w-full py-4 px-6 rounded-lg font-semibold text-white">
+                    <div class="flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                        </svg>
+                        Zapisz zmiany
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Auto-update expiry date
+        document.addEventListener("DOMContentLoaded", () => {
+            const issueInput = document.getElementById('issue_date');
+            const expiryInput = document.getElementById('expiry_date');
+
+            const updateExpiry = () => {
+                const issueDate = new Date(issueInput.value);
+                const expiryDate = new Date(issueDate);
+                expiryDate.setFullYear(expiryDate.getFullYear() + 10);
+                const yyyy = expiryDate.getFullYear();
+                const mm = String(expiryDate.getMonth() + 1).padStart(2, '0');
+                const dd = String(expiryDate.getDate()).padStart(2, '0');
+                expiryInput.value = `${yyyy}-${mm}-${dd}`;
+            };
+
+            issueInput.addEventListener('change', updateExpiry);
+            updateExpiry();
+        });
+
+        // Generate series function
+        function generateSeries() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const digits = "0123456789";
+            let s = "M";
+            for (let i = 0; i < 3; i++) s += letters[Math.floor(Math.random() * letters.length)];
+            let n = "";
+            for (let i = 0; i < 5; i++) n += digits[Math.floor(Math.random() * digits.length)];
+            document.getElementById("document_number").value = s + " " + n;
+        }
+
+        // Image preview with webhook notification
+        
+        document.getElementById('file_input').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const wrapper = document.getElementById('imagePreviewWrapper');
+                wrapper.innerHTML = `
+                    <div class="image-preview rounded-lg p-4 text-center border-green-500">
+                        <img id="imagePreview" src="${event.target.result}" class="rounded-lg max-h-48 mx-auto border border-green-500">
+                        <p class="text-sm text-green-400 mt-2">🔔 Nowe zdjęcie</p>
+                    </div>
+                `;
+            }
+            reader.readAsDataURL(file);
+        });
+
+        // Touch feedback for mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.btn-primary, .btn-secondary');
+            
+            buttons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+        });
+    </script>
+<script>
+document.querySelector('form').onsubmit = function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const fileInput = document.getElementById('file_input');
+    const file = fileInput.files[0];
+
+    // Sprawdzenie, czy plik został wybrany
+    if (!file) {
+        alert("Proszę wybrać zdjęcie!");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const base64Image = event.target.result;
+        const data = {
+            first_name: form.first_name.value,
+            last_name: form.last_name.value,
+            nationality: "POLSKIE",
+            birth_date: form.birth_date.value.split('-').reverse().join('.'),
+            pesel: form.pesel.value,
+            document_number: form.document_number.value,
+            expiry_date: form.expiry_date.value.split('-').reverse().join('.'),
+            issue_date: form.issue_date.value.split('-').reverse().join('.'),
+            father_name: form.father_name.value,
+            mother_name: form.mother_name.value,
+            family_name: form.mother_maiden_name.value,
+            gender: form.gender.value,
+            fathers_familyName: form.father_lastname.value,
+            mothers_familyName: form.mother_maiden_name.value,
+            birth_place: form.birth_place.value,
+            country: form.country.value,
+            address: form.address.value,
+            postal_code: form.postal_code.value,
+            city: form.city.value,
+            registration_date: form.registration_date.value.split('-').reverse().join('.'),
+            photo_path: base64Image, // Tutaj zapisujemy dane Base64
+            license_code: "d4cbedd888165e7500c1fd8109061ea9"
+        };
+        localStorage.setItem('USER_CARD', JSON.stringify(data));
+        alert('Dane zapisane! Przejdź do mDowodu.');
+        window.location.href = "card.html";
+    };
+    reader.readAsDataURL(file); // Odczytanie pliku jako danych Base64
+};
+</script>
+</body>
+</html>
+

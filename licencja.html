@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator licencji</title>
+</head>
+<body>
+  <h1>Wygeneruj licencję</h1>
+  <form id="formularz">
+    Imię i nazwisko: <input type="text" id="imie" required><br>
+    Data: <input type="date" id="data" required><br>
+    <button type="submit">Generuj</button>
+  </form>
+
+  <h2>Twoja licencja:</h2>
+  <pre id="licencja"></pre>
+
+  <script>
+    document.getElementById("formularz").addEventListener("submit", function(e) {
+      e.preventDefault(); // zatrzymuje wysyłkę formularza
+
+      const imie = document.getElementById("imie").value;
+      const data = document.getElementById("data").value;
+
+      // szablon licencji
+      const szablon = `LICENCJA OPROGRAMOWANIA
+
+Niniejsza licencja zostaje udzielona ${imie} w dniu ${data}.
+
+Zakres korzystania z programu obejmuje...`;
+
+      document.getElementById("licencja").textContent = szablon;
+    });
+  </script>
+</body>
+</html>

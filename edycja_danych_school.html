@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Ustawienia legitymacji</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="theme-color" content="#0f0f23">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    html, body { overflow-x: hidden; max-width: 100vw; }
+    .gradient-bg { background: linear-gradient(135deg,#0f0f23 0%,#1a1a3a 30%,#2d1b69 70%,#0f0f23 100%); min-height: 100vh; }
+    .form-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); }
+    .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: all 0.18s ease; color: #fff; }
+    .input-field:focus { background: rgba(255,255,255,0.08); border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.08); outline: none; }
+    .btn-primary { background: linear-gradient(135deg,#ef4444 0%,#dc2626 100%); transition: all 0.2s ease; }
+    .btn-primary:hover { background: linear-gradient(135deg,#dc2626 0%,#b91c1c 100%); transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(239,68,68,0.25); }
+    .label-text { color: #e2e8f0; font-weight: 500; }
+    .toast { position: fixed; right: 20px; top: 20px; background: rgba(16,163,127,0.95); color: white; padding: 10px 16px; border-radius: 10px; box-shadow: 0 6px 18px rgba(2,6,23,0.6); transform: translateY(-10px); opacity: 0; transition: all 0.25s ease; z-index: 60; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .small-muted { color: #a8b3c7; font-size: 13px; }
+  </style>
+</head>
+<body class="gradient-bg text-white">
+  <div class="min-h-screen py-8 px-4">
+    <div class="max-w-2xl mx-auto mb-6 text-center">
+      <h1 class="text-2xl font-bold mb-1">Ustawienia legitymacji</h1>
+      <p class="text-indigo-200 text-sm small-muted">Wpisz dane, a następnie kliknij „Zapisz”. Dane zapisywane są w lokalnej pamięci przeglądarki.</p>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+      <form id="settingsForm" class="form-card rounded-2xl p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label class="block mb-2 text-sm label-text">Imiona (wymagane dwa)</label>
+            <input type="text" id="firstname" class="w-full input-field p-3 rounded-lg" placeholder="np. Jan Jerzy">
+            <p id="firstname-error" class="text-red-500 text-xs mt-1 hidden">Musisz wpisać co najmniej dwa imiona.</p>
+          </div>
+          <div>
+            <label class="block mb-2 text-sm label-text">Nazwisko</label>
+            <input type="text" id="lastname" class="w-full input-field p-3 rounded-lg" placeholder="np. Kowalski">
+          </div>
+          <div>
+            <label class="block mb-2 text-sm label-text">Rola</label>
+            <select id="role" class="w-full input-field p-3 rounded-lg">
+            <option value="">— wybierz —</option>
+            <option value="Uczeń">Uczeń</option>
+            <option value="Uczennica">Uczennica</option>
+          </select>
+          </div>
+          <div>
+            <label class="block mb-2 text-sm label-text">Data urodzenia</label>
+            <input type="date" id="dob" class="w-full input-field p-3 rounded-lg">
+          </div>
+          <div>
+            <div> 
+            <div class="mb-4">
+            <div class="flex items-center justify-between mb-2">
+            <label for="pesel" class="text-sm label-text">PESEL</label>
+            <button id="peselRandomBtn" type="button" class="bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-3 py-1 rounded-full transition">
+            🎲 Losuj PESEL
+            </button>
+            </div>
+            <input type="text" id="pesel" maxlength="11" class="w-full input-field p-3 rounded-lg" placeholder="np. 07241603451">
+            </div>
+
+
+          <div>
+            <div class="mb-4">
+            <label class="block mb-2 text-sm label-text">Wiek (automatycznie)</label>
+            <input type="text" id="agePreview" readonly class="w-full input-field p-3 rounded-lg bg-white/6 text-white" placeholder="—">
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 text-sm label-text">Zdjęcie</label>
+          <input type="file" id="photo" accept="image/*" class="w-full input-field p-3 rounded-lg">
+          <img id="preview-img" src="" alt="Podgląd zdjęcia" class="rounded-lg max-h-48 mx-auto mt-3 hidden border border-white/10">
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 mb-6">
+          <div>
+            <label class="block mb-2 text-sm label-text">Nazwa szkoły</label>
+            <input type="text" id="schoolName" class="w-full input-field p-3 rounded-lg" placeholder="np. TECHNIKUM OK im. Janusza Kowalskiego w Gdańsku">
+          </div>
+          <div>
+            <label class="block mb-2 text-sm label-text">Ulica szkoły</label>
+            <input type="text" id="schoolStreet" class="w-full input-field p-3 rounded-lg" placeholder="np. ul. Podjebana Stara 6/7">
+          </div>
+          <div>
+            <label class="block mb-2 text-sm label-text">Kod pocztowy i miasto</label>
+            <input type="text" id="schoolCity" class="w-full input-field p-3 rounded-lg" placeholder="np. 80-845 Gdańsk">
+          </div>
+          <div>
+            <label class="block mb-2 text-sm label-text">Telefon szkoły</label>
+            <input type="text" id="schoolPhone" class="w-full input-field p-3 rounded-lg" placeholder="np. 123456789">
+          </div>
+          <div>
+            <label class="block mb-2 text-sm label-text">Dyrektor szkoły</label>
+            <input type="text" id="schoolDirector" class="w-full input-field p-3 rounded-lg" placeholder="np. Jan Kowalski">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-4 px-6 rounded-lg font-semibold text-white">
+          💾 Zapisz dane
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">✅ Dane zapisane</div>
+
+
+<style>
+      #peselRandomBtn {
+  font-size: 0.75rem;   /* mniejszy tekst */
+  padding: 4px 10px;    /* kompaktowe wymiary */
+  border-radius: 9999px;/* mocno zaokrąglony */
+  line-height: 1.2;
+}
+
+#role {
+  color: #fff; /* zawsze biały tekst w pasku */
+}
+#role option {
+  color: #000; /* wszystkie opcje rozwijane czarne */
+}
+
+</style>
+
+
+<script>
+function calculateAgeFromISO(isoDate) {
+  if (!isoDate) return "";
+  const today = new Date();
+  const birth = new Date(isoDate);
+  if (isNaN(birth)) return "";
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age >= 0 ? age + " lat" : "";
+}
+
+function showToast(msg="✅ Dane zapisane") {
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+/* Podgląd zdjęcia */
+let photoData=null;
+const previewImg=document.getElementById("preview-img");
+document.getElementById("photo").addEventListener("change",e=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    photoData=ev.target.result;
+    previewImg.src=photoData;
+    previewImg.classList.remove("hidden");
+  };
+  reader.readAsDataURL(file);
+});
+
+/* Wczytywanie danych */
+document.addEventListener("DOMContentLoaded",()=>{
+  try{
+    ["firstname","lastname","role","dobISO","pesel","schoolName","schoolStreet","schoolCity","schoolPhone","schoolDirector"].forEach(k=>{
+      const v=localStorage.getItem(k);
+      if(v){
+        if(k==="dobISO") document.getElementById("dob").value=v;
+        else document.getElementById(k).value=v;
+      }
+    });
+    const photo=localStorage.getItem("photo");
+    if(photo){ photoData=photo; previewImg.src=photo; previewImg.classList.remove("hidden"); }
+    const age=localStorage.getItem("age");
+    if(age) document.getElementById("agePreview").value=age;
+  }catch(err){console.error("Błąd odczytu",err);}
+});
+
+// --- Wyczyść formularz przy starcie ---
+document.addEventListener("DOMContentLoaded",()=>{
+  ["firstname","lastname","role","dob","pesel","schoolName","schoolStreet","schoolCity","schoolPhone","schoolDirector","agePreview"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value="";
+  });
+  previewImg.classList.add("hidden");
+});
+
+
+/* Walidacja telefonu – wymuszenie +48 na początku */
+document.getElementById("schoolPhone").addEventListener("input", e=>{
+  let val=e.target.value.replace(/\s+/g,""); // bez spacji
+  if(!val.startsWith("+48")){ 
+    val = "+48" + val.replace(/^\+?48?/,""); 
+  }
+  e.target.value=val;
+});
+
+// ===================== PESEL: generowanie zgodne z datą i rolą =====================
+
+// Parsuje "YYYY-MM-DD" -> {y,m,d} lub null
+function parseDobValue(dobVal) {
+  if (!dobVal) return null;
+  const parts = String(dobVal).split("-");
+  if (parts.length !== 3) return null;
+  const y = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const d = parseInt(parts[2], 10);
+  if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
+  return { y, m, d };
+}
+
+// Normalizacja roli → "male"|"female"|null
+function getGenderParityFromRole(roleValue) {
+  if (!roleValue) return null;
+
+  // normalizacja: zamiana na małe litery, usunięcie ogonków
+  const norm = roleValue.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  if (norm.includes("uczen") && !norm.includes("uczennica")) {
+    return "male"; // Uczeń → mężczyzna
+  }
+  if (norm.includes("uczennica")) {
+    return "female"; // Uczennica → kobieta
+  }
+
+  return null;
+}
+
+
+// Losowa sensowna data (fallback)
+function randomReasonableDob() {
+  const year = 1950 + Math.floor(Math.random() * 70); // 1950-2019
+  const month = 1 + Math.floor(Math.random() * 12);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const day = 1 + Math.floor(Math.random() * daysInMonth);
+  return { y: year, m: month, d: day };
+}
+
+// Generuje PESEL z podanych części i wymuszonej płci ("male"|"female")
+// obsługa stuleci: 1800(+80), 1900(+0), 2000(+20), 2100(+40), 2200(+60)
+function generatePeselFromParts(year, month, day, genderParity) {
+  const yy = String(year).slice(-2).padStart(2, "0");
+
+  // zakodowanie miesiąca wg stulecia
+  let monthCode = month;
+  const century = Math.floor(year / 100);
+  if (century === 18) monthCode = month + 80;
+  else if (century === 19) monthCode = month;
+  else if (century === 20) monthCode = month + 20;
+  else if (century === 21) monthCode = month + 40;
+  else if (century === 22) monthCode = month + 60;
+  // safety
+  monthCode = String(monthCode).padStart(2, "0");
+
+  const dd = String(day).padStart(2, "0");
+
+  // trzy losowe cyfry (prefix serii)
+  const serialPrefix = String(Math.floor(Math.random() * 1000)).padStart(3, "0");
+
+  // cyfra płci (10. cyfra, indeks 9)
+  let genderDigit;
+  if (genderParity === "male") {
+    const odds = [1,3,5,7,9];
+    genderDigit = String(odds[Math.floor(Math.random() * odds.length)]);
+  } else {
+    const evens = [0,2,4,6,8];
+    genderDigit = String(evens[Math.floor(Math.random() * evens.length)]);
+  }
+
+  const firstTen = yy + monthCode + dd + serialPrefix + genderDigit; // 10 cyfr
+
+  // oblicz cyfrę kontrolną
+  const weights = [1,3,7,9,1,3,7,9,1,3];
+  let sum = 0;
+  for (let i = 0; i < 10; i++) {
+    sum += Number(firstTen[i]) * weights[i];
+  }
+  const control = (10 - (sum % 10)) % 10;
+
+  return firstTen + String(control);
+}
+
+// Helper: wygeneruj PESEL oparty na polach formularza (albo losowo jeśli brak)
+function generatePeselAuto() {
+  const dobVal = document.getElementById("dob")?.value || "";
+  const parsedDob = parseDobValue(dobVal);
+  const roleVal = document.getElementById("role")?.value || "";
+  const genderFromRole = getGenderParityFromRole(roleVal);
+
+  const dobParts = parsedDob || randomReasonableDob();
+  const genderParity = genderFromRole || (Math.random() < 0.5 ? "male" : "female");
+
+  return generatePeselFromParts(dobParts.y, dobParts.m, dobParts.d, genderParity);
+}
+
+// ===================== PODPIĘCIE DO DOM =====================
+document.addEventListener("DOMContentLoaded", () => {
+  const peselEl = document.getElementById("pesel");
+  const dobEl = document.getElementById("dob");
+  const roleEl = document.getElementById("role");
+  const btn = document.getElementById("peselRandomBtn");
+  if (!peselEl) return;
+
+  // Kliknięcie przycisku: ustaw wartość PESEL zgodnie z datą i rolą
+  if (btn) {
+    btn.addEventListener("click", () => {
+      const pesel = generatePeselAuto();
+      peselEl.value = pesel;
+      peselEl.placeholder = pesel;
+      showToast("🔢 Wygenerowano PESEL");
+    });
+  }
+
+  // Przy focusie pustego pola: ustaw placeholder na podstawie DOB/ROLE
+  peselEl.addEventListener("focus", () => {
+    if (!peselEl.value) peselEl.placeholder = generatePeselAuto();
+  });
+
+  // Podwójny klik -> nowe losowanie placeholdera (jeśli puste)
+  peselEl.addEventListener("dblclick", () => {
+    if (!peselEl.value) peselEl.placeholder = generatePeselAuto();
+  });
+
+  // Jeśli zmieni się data urodzenia lub rola, i pole pesel jest puste -> aktualizuj placeholder
+  if (dobEl) dobEl.addEventListener("change", () => {
+    if (!peselEl.value) peselEl.placeholder = generatePeselAuto();
+  });
+  if (roleEl) roleEl.addEventListener("change", () => {
+    if (!peselEl.value) peselEl.placeholder = generatePeselAuto();
+  });
+});
+
+
+
+/* Zapis z walidacją */
+document.getElementById("settingsForm").addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const fields = [
+    "firstname","lastname","role","dob","pesel",
+    "schoolName","schoolStreet","schoolCity","schoolPhone","schoolDirector"
+  ];
+
+  let valid = true;
+  let firstErrorField = null;
+
+  // Reset błędów
+  fields.forEach(id=>{
+    document.getElementById(id).classList.remove("ring-2","ring-red-500");
+  });
+
+  // Sprawdzenie pustych pól
+  fields.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el.value.trim()){
+      valid = false;
+      el.classList.add("ring-2","ring-red-500");
+      if(!firstErrorField) firstErrorField = el;
+    }
+  });
+
+  const firstname=document.getElementById("firstname").value.trim();
+  const lastname=document.getElementById("lastname").value.trim();
+  const role=document.getElementById("role").value;
+  const dobISO=document.getElementById("dob").value;
+  const pesel=document.getElementById("pesel").value.trim();
+  const schoolName=document.getElementById("schoolName").value.trim();
+  const schoolStreet=document.getElementById("schoolStreet").value.trim();
+  const schoolCity=document.getElementById("schoolCity").value.trim();
+  const schoolPhone=document.getElementById("schoolPhone").value.trim();
+  const schoolDirector=document.getElementById("schoolDirector").value.trim();
+
+  /* Walidacja imienia */
+  const errorEl=document.getElementById("firstname-error");
+  const imiona=firstname.split(/\s+/).filter(Boolean);
+  if(imiona.length<2){ errorEl.classList.remove("hidden"); return; }
+  else{ errorEl.classList.add("hidden"); }
+
+  /* Walidacja telefonu */
+  if(!/^\+48\d{9}$/.test(schoolPhone)){
+    showToast("❌ Numer telefonu musi mieć format +48 i 9 cyfr");
+    return;
+  }
+
+  /* Walidacja roli */
+  if(!role){
+    showToast("❌ Wybierz rolę: Uczeń lub Uczennica");
+    return;
+  }
+
+  /* Walidacja uzupełnienia wszystkich pól */
+  if(!firstname||!lastname||!dobISO||!pesel||!schoolName||!schoolStreet||!schoolCity||!schoolPhone||!schoolDirector){
+    showToast("❌ Uzupełnij wszystkie dane");
+    return;
+  }
+
+
+  const ageText=calculateAgeFromISO(dobISO);
+  const dobFormatted=dobISO?dobISO.split("-").reverse().join("."):"";
+  let fullNameForCard=(firstname+" "+lastname).trim();
+  const parts=fullNameForCard.split(/\s+/);
+  if(parts.length>2){ fullNameForCard=parts.slice(0,2).join(" ")+"<br>"+parts.slice(2).join(" "); }
+
+  try{
+    localStorage.setItem("firstname",firstname);
+    localStorage.setItem("lastname",lastname);
+    localStorage.setItem("fullname",fullNameForCard);
+    localStorage.setItem("role",role);
+    localStorage.setItem("dobISO",dobISO);
+    localStorage.setItem("dobFormatted",dobFormatted);
+    localStorage.setItem("pesel",pesel);
+    localStorage.setItem("schoolName",schoolName);
+    localStorage.setItem("schoolStreet",schoolStreet);
+    localStorage.setItem("schoolCity",schoolCity);
+    localStorage.setItem("schoolPhone",schoolPhone);
+    localStorage.setItem("schoolDirector",schoolDirector);
+    localStorage.setItem("age",ageText);
+    if(photoData) localStorage.setItem("photo",photoData);
+
+    document.getElementById("agePreview").value=ageText;
+    showToast("✅ Dane zapisane lokalnie");
+  }catch(err){
+    console.error("Błąd zapisu",err);
+    showToast("❌ Błąd zapisu");
+  }
+});
+
+
+</script>
+</body>
+</html>

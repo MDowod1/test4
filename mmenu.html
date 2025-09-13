@@ -1,0 +1,91 @@
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#101317">
+    <link rel="icon" type="image/x-icon" href="assets/app/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/app/images/logo.png">
+    <link rel="shortcut icon" href="assets/app/images/logo.png">
+
+
+    <title>mObywatel</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="assets/app/id.css">
+    <link rel="stylesheet" href="assets/app/main.css">
+    <link rel="icon" type="image/x-icon" href="assets/app/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/app/images/logo.png">
+    <link rel="shortcut icon" href="assets/app/images/logo.png">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="top_grid">
+            <img class="logo" src="assets/app/images/logo_large.png" alt="mObywatel">
+            <p class="logo_text">mObywatel</p>
+        </div>
+        <div class="top_text">
+            <p class="welcome"></p>
+            <p class="login_text">Zaloguj się do aplikacji.</p>
+        </div>
+        <div class="password_box">
+            <div class="password_grid">
+                <p class="password_text">Hasło</p>
+                <div class="input_holder">
+                    <input class="password_input" type="password" autocomplete="current-password">
+                    <div class="eye"></div>
+                </div>
+                <p class="forgot_password">Nie pamiętasz hasła?</p>
+            </div>
+        </div>
+        <div class="bottom">
+            <p class="login" id="loginBtn" style="cursor:pointer;">Zaloguj się</p>
+            <div class="data">
+                <img class="logo_other" src="assets/app/images/coi.png" alt="COI">
+                <img class="logo_other" src="assets/app/images/mc.png" alt="Ministerstwo Cyfryzacji">
+                <p class="version">wersja 4.63.0 (17)</p>
+            </div>
+        </div>
+    </div>
+    <script src="assets/app/id.js"></script>
+    <script src="assets/app/manifest.js"></script>
+    <script src="assets/cache.js"></script>
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            window.location.href = 'mdashboard.html';
+        });
+    </script>
+    <script>
+            function isPWA() {
+                return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true);
+            }
+        
+            if (!isPWA()) {
+                document.body.innerHTML = `
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100vh; padding: 20px; font-family: Arial, sans-serif;">
+                        <h2 style="margin-bottom: 20px;">Dodaj stronę do ekranu głównego</h2>
+                        <p><strong>iOS</strong><br>Wejdź na stronę w Safari, kliknij ikonkę udostępniania i dodaj do ekranu głównego.</p>
+                        <p><strong>Android</strong><br>Wejdź na stronę w Chrome, kliknij 3 kropki w prawym górnym rogu, a następnie "Dodaj do ekranu głównego".</p>
+                    </div>
+                `;
+                document.body.style.backgroundColor = "#fff";
+            }
+
+            
+    
+
+    
+    
+        </script>
+<script>
+
+
+
+
+</script>
+
+
+</body>

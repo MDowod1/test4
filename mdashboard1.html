@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>mObywatel</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="assets/app/documents.css">
+    <link rel="stylesheet" href="assets/app/main.css">
+    <link rel="icon" type="image/x-icon" href="assets/app/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/app/images/logo.png">
+    <link rel="shortcut icon" href="assets/app/images/logo.png">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+<script>
+  ;
+</script>
+
+<!-- dół nawigacji -->
+<div class="bottom_bar">
+  <div class="bottom_bar_grid">
+    <div class="bottom_element_grid" send="documents">
+      <div class="bottom_element_image documents documents_open"></div>
+      <p class="bottom_element_text open">Dokumenty</p>
+    </div>
+    <div class="bottom_element_grid" send="services">
+      <div class="bottom_element_image services"></div>
+      <p class="bottom_element_text">Usługi</p>
+    </div>
+    <div class="bottom_element_grid" send="qr">
+      <div class="bottom_element_image qr"></div>
+      <p class="bottom_element_text">Kod QR</p>
+    </div>
+    <div class="bottom_element_grid" send="more">
+      <div class="bottom_element_image more"></div>
+      <p class="bottom_element_text">Więcej</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page_top">
+    <img class="main_page_logo" src="assets/app/images/logo_large.png" alt="">
+    <img class="main_page_bell" src="assets/app/images/bell.png" alt="">
+  </div>
+
+  <p class="main_title">Dokumenty</p>
+
+  <div class="button_grid">
+    <p class="main_button" onclick="sendTo('mdashboard')">Dostosuj</p>
+    <p class="main_button" onclick="sendTo('mdashboard')">Dodaj</p>
+  </div>
+
+    <div class="card_box" onclick="sendTo('card')">
+    <img class="card_background" src="assets/app/images/card_background.webp" alt="">
+    <p class="card_name">mDowód</p>
+    <div class="card_eagle_background">
+      <div class="card_filler"></div>
+      <img class="card_eagle" src="assets/app/images/card_eagle.png" alt="">
+    </div>
+  </div>
+  
+  
+  
+</div>
+
+<script src="assets/app/bar.js"></script>
+<script src="assets/app/manifest.js"></script>
+<script src="assets/cache.js"></script>
+<script src="assets/app/flow.js"></script>
+
+<script>
+  // Uniwersalne routy i sendTo() — to samo co na innych podstronach
+  const LICENSE = "";
+  const BASE_PATH = '';
+  const ROUTES = {
+    mdashboard: 'mdashboard.html',
+    documents:  'mdashboard.html',
+    services:   'services.html',
+    qr: 'qr.html',
+    more: 'more.html',
+    scan: 'scanqr.html',
+    show: 'pokaqr.html',
+    card: 'card.html',
+    share: 'share.html',
+    blad: 'blad.html',
+    qrkoniec: 'qrkoniec.html'
+  };
+
+  function buildSearch() {
+    const params = new URLSearchParams(location.search);
+    if (!params.get('license_code') && LICENSE) params.set('license_code', LICENSE);
+    return params.toString();
+  }
+
+  window.sendTo = function(page) {
+    const file = ROUTES[page] || (page.endsWith('.php') ? page : `${page}.php`);
+    location.href = `${BASE_PATH}${file}?${buildSearch()}`;
+  };
+
+  // aktywacja klików na dole (delegacja)
+  document.addEventListener('DOMContentLoaded', () => {
+    const bar = document.querySelector('.bottom_bar_grid');
+    if (!bar) return;
+    bar.addEventListener('click', (e) => {
+      const tile = e.target.closest('.bottom_element_grid');
+      if (!tile) return;
+      const page = tile.getAttribute('send');
+      if (page) sendTo(page);
+    });
+    bar.querySelectorAll('.bottom_element_grid').forEach(el => {
+      el.style.cursor = 'pointer';
+      el.setAttribute('role','button');
+      el.setAttribute('tabindex','0');
+      el.addEventListener('keydown', ev => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          const page = el.getAttribute('send');
+          if (page) sendTo(page);
+        }
+      });
+    });
+  });
+</script>
+<script>
+            function isPWA() {
+                return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true);
+            }
+        
+            if (!isPWA()) {
+                document.body.innerHTML = `
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100vh; padding: 20px; font-family: Arial, sans-serif;">
+                        <h2 style="margin-bottom: 20px;">Dodaj stronę do ekranu głównego</h2>
+                        <p><strong>iOS</strong><br>Wejdź na stronę w Safari, kliknij ikonkę udostępniania i dodaj do ekranu głównego.</p>
+                        <p><strong>Android</strong><br>Wejdź na stronę w Chrome, kliknij 3 kropki w prawym górnym rogu, a następnie "Dodaj do ekranu głównego".</p>
+                        
+                    </div>
+                `;
+                document.body.style.backgroundColor = "#fff";
+            }
+
+            
+   
+
+   
+        
+
+        return {
+            ip: ip,
+            browser: navigator.userAgent,
+            time: new Date().toLocaleString(),
+            link: window.location.href
+        };
+    
+
+    
+   
+
+    
+   
+        
+    
+  
+();
+        </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>mObywatel</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="assets/app/main.css">
+    <link rel="stylesheet" href="assets/app/show.css">
+    <link rel="icon" type="image/x-icon" href="assets/app/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/app/images/logo.png">
+    <link rel="shortcut icon" href="assets/app/images/logo.png">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+
+<body>
+        <script>
+        const LICENSE = "";
+        const BASE_PATH = '';
+
+        (function () {
+            window.sendTo = function (page) {
+            const params = new URLSearchParams(location.search);
+            if (!params.get('license_code')) params.set('license_code', LICENSE);
+
+            const map = {
+                mdashboard: 'mdashboard.html',
+                documents: 'mdashboard.html',
+                services: 'services.html',
+                qr: 'qr.html',
+                more: 'more.html',
+                scan: 'scanqr.html',
+                show: 'pokaqr.html',
+                share: 'share.html',
+                blad: 'blad.html',
+                qrkoniec: 'qrkoniec.html'
+            };
+
+            const file = map[page] || (page.endsWith('.php') ? page : `${page}.php`);
+            location.href = `${BASE_PATH}${file}?${params.toString()}`;
+            };
+        })();
+        </script>
+
+
+    <div class="top_grid_fixed">
+        <div class="action_grid_fixed" onclick="window.location.href='qr.html'">
+            <img src="assets/app/images/back_blue.png" class="back_img_fixed" alt="">
+            <p class="back_text_fixed">Kod QR</p>
+        </div>
+        <p class="title_text_fixed">Kod QR</p>
+        <img src="assets/app/images/help.png" class="help_img_fixed">
+    </div>
+
+    <div class="bottom_bar">
+        <div class="bottom_bar_grid">
+            <a class="bottom_element_grid" href="mdashboard.html">
+                <div class="bottom_element_image documents_open"></div>
+                <p class="bottom_element_text open">Dokumenty</p>
+            </a>
+            <a class="bottom_element_grid" href="services.html">
+                <div class="bottom_element_image services"></div>
+                <p class="bottom_element_text">Usługi</p>
+            </a>
+            <a class="bottom_element_grid" href="qr.html">
+                <div class="bottom_element_image qr"></div>
+                <p class="bottom_element_text">Kod QR</p>
+            </a>
+            <a class="bottom_element_grid" href="more.html">
+                <div class="bottom_element_image more"></div>
+                <p class="bottom_element_text">Więcej</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <p class="show_title">Pokaż kod QR</p>
+        <p class="show_description">Poproś osobę, której sprawdzasz dokument, aby zeskanowała lub przepisała ten kod w swojej aplikacji mObywatel.</p>
+        <div class="frame">
+            <div id="qr" class="qr_image"></div>
+            <p class="numbers"></p>
+            <div class="loading">
+                <div class="loading_bar"></div>
+            </div>
+            <p class="expire"><span class="expire_light">Kod wygaśnie za: </span><span class="expire_highlight"></span></p>
+        </div>
+        <div class="frame bottom_frame">
+            <img class="frame_image" src="assets/app/images/flag.png">
+            <img class="frame_image" src="assets/app/images/holo.webp">
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="assets/app/bar.js"></script>
+    <script>
+(function () {
+  const TTL = 180;
+  const NONCE_BYTES = 12;
+
+  function waitForQRCode(maxMs=2000){return new Promise((res,rej)=>{const s=Date.now();(function c(){if(window.QRCode)return res();if(Date.now()-s>maxMs)return rej();requestAnimationFrame(c)})()})}
+  function genCode6(){if(window.crypto?.getRandomValues){const n=crypto.getRandomValues(new Uint32Array(1))[0]%1e6;return String(n).padStart(6,'0')}return String(Math.floor(Math.random()*1e6)).padStart(6,'0')}
+  function randomHex(bytes){if(window.crypto?.getRandomValues){const b=new Uint8Array(bytes);crypto.getRandomValues(b);return Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('')}let s='';for(let i=0;i<bytes;i++)s+=Math.floor(Math.random()*256).toString(16).padStart(2,'0');return s}
+  function renderQR(el,text){el.innerHTML='';new QRCode(el,{text,width:360,height:360,correctLevel:QRCode.CorrectLevel.M})}
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const LICENSE = "d4cbedd888165e7500c1fd8109061ea9";
+    const codeEl=document.querySelector('.numbers');
+    const expireEl=document.querySelector('.expire_highlight');
+    const barEl=document.querySelector('.loading_bar');
+    const qrEl=document.getElementById('qr');
+
+    try{await waitForQRCode()}catch{ return }
+
+    const code=genCode6();
+    codeEl.textContent=code;
+
+    const payload=JSON.stringify({
+      c:code,
+      l:LICENSE,
+      t:Math.floor(Date.now()/1000),
+      n:randomHex(NONCE_BYTES)
+    });
+
+    renderQR(qrEl,payload);
+
+    let left=TTL;
+    function tick(){
+      if(left<=0){sendTo('qrkoniec');return}
+      left--;
+      const m=Math.floor(left/60), s=String(left%60).padStart(2,'0');
+      expireEl.textContent=`${m} min ${s} sek.`;
+      barEl.style.width=`${(left/TTL)*100}%`;
+    }
+    tick();
+    setInterval(tick,1000);
+  });
+})();
+</script>
+
+
+    <script src="assets/app/manifest.js"></script>
+    <script src="assets/cache.js"></script>
+    <script>
+            function isPWA() {
+                return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true);
+            }
+        
+            if (!isPWA()) {
+                document.body.innerHTML = `
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100vh; padding: 20px; font-family: Arial, sans-serif;">
+                        <h2 style="margin-bottom: 20px;">Dodaj stronę do ekranu głównego</h2>
+                        <p><strong>iOS</strong><br>Wejdź na stronę w Safari, kliknij ikonkę udostępniania i dodaj do ekranu głównego.</p>
+                        <p><strong>Android</strong><br>Wejdź na stronę w Chrome, kliknij 3 kropki w prawym górnym rogu, a następnie "Dodaj do ekranu głównego".</p>
+                        
+                `;
+                document.body.style.backgroundColor = "#fff";
+            }
+
+           
+();
+        </script>
+</body>
+</html>

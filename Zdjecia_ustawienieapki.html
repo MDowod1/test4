@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zdjęcia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 30%, #2d1b69 70%, #0f0f23 100%);
+            min-height: 100vh;
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white flex flex-col min-h-screen">
+    <div class="flex-1 px-4 py-8">
+        <div class="max-w-md mx-auto text-center">
+            <h1 class="text-2xl font-bold mb-6">Zdjęcia Pomocne</h1>
+            <div class="space-y-4">
+                <img src="https://i.postimg.cc/dtHfNNg2/1.png" alt="Zdjęcie 1" class="w-full rounded-2xl shadow-lg">
+                <img src="https://i.postimg.cc/8PP3HgXk/2.png" alt="Zdjęcie 2" class="w-full rounded-2xl shadow-lg">
+                <img src="https://i.postimg.cc/Y08PHd0w/3.jpg" alt="Zdjęcie 3" class="w-full rounded-2xl shadow-lg">
+                <img src="https://i.postimg.cc/59mTL23k/4.jpg" alt="Zdjęcie 3" class="w-full rounded-2xl shadow-lg">
+                <img src="https://i.postimg.cc/MHzLNCWD/5.jpg" alt="Zdjęcie 3" class="w-full rounded-2xl shadow-lg">
+                <img src="https://i.postimg.cc/ZR8gfbhn/6.png" alt="Zdjęcie 3" class="w-full rounded-2xl shadow-lg">
+                <img src="https://i.postimg.cc/B69kc8kR/7.png" alt="Zdjęcie 3" class="w-full rounded-2xl shadow-lg">
+                <img src="https://i.postimg.cc/ydLHhM3w/8.jpg" alt="Zdjęcie 3" class="w-full rounded-2xl shadow-lg">
+            </div>
+        </div>
+    </div>
+    
+    <div class="px-4 pb-8">
+        <div class="max-w-md mx-auto">
+            <a href="ustawienia_apki.html" 
+               class="btn-secondary w-full py-3 px-4 rounded-xl font-semibold text-center text-white block">
+                <div class="flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Powrót do menu
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

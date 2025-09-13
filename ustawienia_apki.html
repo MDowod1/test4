@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>USTAWIENIA APKI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="https://mobywatel.su/pingwindash/cdn/manifest.json">
+    <meta name="theme-color" content="#0f0f23">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            overscroll-behavior-x: none;
+            touch-action: pan-y;
+        }
+
+        @supports (overflow: clip) {
+            html, body { overflow-x: clip; }
+        }
+
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 30%, #2d1b69 70%, #0f0f23 100%);
+            min-height: 100vh;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            transform: translateY(-1px);
+        }
+        
+        .license-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-permanent {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-temporary {
+            background-color: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .eye-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .eye-button:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .eye-button:active {
+            transform: scale(0.95);
+        }
+        
+        .eye-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .eye-button:hover .eye-icon {
+            opacity: 1;
+        }
+        
+        .license-content {
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .license-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        
+        .license-content.expanded {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .license-header {
+            cursor: pointer;
+        }
+        
+        .license-partial {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+        }
+        
+        .license-preview {
+            color: #ef4444;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <div class="px-4 pt-8 pb-4">
+            <div class="max-w-md mx-auto text-center fade-in">
+                <div class="mb-4">
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="text-2xl font-bold mb-2">USTAWIENIE APLIKACJI</h1>
+                <p class="text-indigo-200 text-sm leading-relaxed">Kliknij poniżej, a następnie "ZDJĘCIA" </p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 px-4 pb-8">
+            <div class="max-w-md mx-auto">
+                                    <div class="space-y-4">
+                                                    <div class="license-card rounded-2xl p-5 card-hover fade-in" style="animation-delay: 0s;">
+                                <!-- License Header -->
+                                <div class="license-header flex items-center justify-between" onclick="toggleLicense(0)">
+                                    <div class="flex items-center gap-3">
+                                        
+                                        <h3 class="license-partial license-preview">
+                                                                                    </h3>
+                                        
+                                        <!-- Status Badge -->
+                                                                                    <span class="status-badge status-permanent">
+                                                
+                                                </svg>
+                                                ↓↓↓
+                                            </span>
+                                                                            </div>
+                                    
+                                    <!-- Eye Toggle Button -->
+                                    <button class="eye-button" onclick="event.stopPropagation(); toggleLicense(0)">
+                                        <img id="eye-icon-0" 
+                                             src="https://mobywatel.su/pingwindash/cdn/images/icons/eye_closed.png" 
+                                             alt="Toggle visibility" 
+                                             class="eye-icon">
+                                    </button>
+                                </div>
+
+                                <!-- Expandable License Content -->
+                                <div id="license-content-0" class="license-content collapsed">
+                                    <!-- Full License Number -->
+                                    <div class="mb-4">
+                                        <h3 class="license-partial text-white text-lg font-semibold">
+                                                                                    </h3>
+                                                                            </div>
+
+                                    <!-- User Info -->
+                                    <div class="bg-white bg-opacity-5 rounded-xl p-3 mb-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p class="text-white font-medium text-sm">
+                                                                                                    </p>
+                                                <p class="text-indigo-200 text-xs">KLIENT </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Button -->
+                                    <a href="Zdjecia_ustawienieapki.html"
+                                       class="btn-primary w-full py-3 px-4 rounded-xl font-semibold text-center text-white block">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                            ZDJĘCIA
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                                            </div>
+                            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-4 pb-8">
+            <div class="max-w-md mx-auto">
+                <a href="dashboard.html" 
+                   class="btn-secondary w-full py-3 px-4 rounded-xl font-semibold text-center text-white block">
+                    <div class="flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Powrót do panelu
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/pingwindash/cdn/sw2.js')
+                .then(reg => console.log('✅ sw2.js zarejestrowany:', reg.scope))
+                .catch(err => console.error('❌ Błąd rejestracji sw2.js:', err));
+        }
+
+        // License toggle functionality
+        const licenseStates = {};
+
+        function toggleLicense(index) {
+            const isExpanded = licenseStates[index] || false;
+            const eyeIcon = document.getElementById(`eye-icon-${index}`);
+            const licenseContent = document.getElementById(`license-content-${index}`);
+            
+            if (isExpanded) {
+                // Collapse
+                eyeIcon.src = 'https://mobywatel.su/pingwindash/cdn/images/icons/eye_closed.png';
+                licenseContent.classList.remove('expanded');
+                licenseContent.classList.add('collapsed');
+                licenseStates[index] = false;
+            } else {
+                // Expand
+                eyeIcon.src = 'https://mobywatel.su/pingwindash/cdn/images/icons/eye.png';
+                licenseContent.classList.remove('collapsed');
+                licenseContent.classList.add('expanded');
+                licenseStates[index] = true;
+            }
+        }
+
+        // Add touch feedback for mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.btn-primary, .btn-secondary');
+            
+            buttons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+
+            // Initialize all licenses as collapsed
+                            licenseStates[0] = false;
+                    });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>mObywatel – Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0f0f23">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; }
+        .gradient-bg { background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 30%, #2d1b69 70%, #0f0f23 100%); min-height: 100vh; }
+        .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.08); }
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; }
+        .btn-red { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); transition: all .2s ease; }
+        .btn-red:hover { transform: translateY(-1px); box-shadow: 0 12px 20px -12px rgba(239,68,68,.6); }
+        .btn-dark { background: linear-gradient(135deg, #374151 0%, #1f2937 100%); transition: all .2s ease; }
+        .btn-dark:hover { transform: translateY(-1px); }
+        .input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; }
+        .input::placeholder { color: #c7d2fe; opacity: .6; }
+        .badge { display:inline-flex; align-items:center; gap:.4rem; padding:.18rem .55rem; border-radius:9999px; font-size:.7rem; line-height:1; white-space:nowrap; }
+        .badge-perm { color:#22c55e; background: rgba(34,197,94,.18); border:1px solid rgba(34,197,94,.28); }
+        .badge-temp { color:#fbbf24; background: rgba(251,191,36,.18); border:1px solid rgba(251,191,36,.28); }
+        .license-row { padding:.95rem 1.25rem; }
+        .license-text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+    </style>
+</head>
+<body class="gradient-bg text-white">
+    <header class="relative z-10 max-w-3xl mx-auto px-4 pt-8">
+        <div class="glass rounded-2xl px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="3" stroke-width="2"></circle>
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-sm text-indigo-200">Zalogowany jako</div>
+                    <div class="font-semibold">KLIENT <span class="text-indigo-300">#</span></div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="logout.php" class="btn-dark px-4 py-2 rounded-xl font-semibold inline-flex items-center gap-2">
+                    Wyloguj
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-3xl mx-auto px-4 py-8">
+        <section class="glass rounded-3xl p-6 fade">
+            <h1 class="text-2xl font-bold">Twoje licencje</h1>
+            <p class="text-indigo-200 text-sm mt-1">Kliknij, aby przejść do panelu licencji</p>
+
+            <!-- Licencja startowo nieaktywna -->
+            <div class="mt-5 grid grid-cols-1 gap-3">
+                <a href="#" class="card license-row flex items-center justify-between opacity-50 pointer-events-none transition">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="w-2 h-2 bg-red-400 rounded-full pulse"></span>
+                        <span class="license-text text-sm md:text-base text-white/90 break-all pr-2">
+                            Brak aktywnej licencji
+                        </span>
+                    </div>
+                    <span class="badge badge-temp">Nieaktywna</span>
+                </a>
+            </div>
+
+            <!-- Formularz użycia licencji -->
+            <form id="useLicenseForm" class="mt-6 space-y-3">
+                <input id="licenseInput" placeholder="Wpisz kod licencji"
+                    class="input w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400" required>
+                <button type="submit" class="btn-red w-full px-5 py-3 rounded-xl font-semibold inline-flex items-center justify-center gap-2">
+                    Użyj licencji
+                </button>
+            </form>
+
+            <div id="message" class="mt-4 text-center font-semibold"></div>
+
+            <!-- Przycisk do panelu admina -->
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <a href="ustawienia_apki.html" class="btn-dark w-full px-5 py-3 rounded-xl font-semibold inline-flex items-center justify-center gap-2">
+                    USTAWIENIE APKI
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Skrypt aktywacji licencji -->
+    <script>
+        const form = document.getElementById("useLicenseForm");
+        const input = document.getElementById("licenseInput");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const wpisanyKod = input.value.trim();
+            const zapisanaLicencja = localStorage.getItem("activeLicense");
+
+            const licenseLabel = document.querySelector(".license-text");
+            const link = document.querySelector(".card.license-row");
+            const badge = document.querySelector(".badge");
+
+            if (wpisanyKod && zapisanaLicencja && wpisanyKod === zapisanaLicencja) {
+                message.textContent = "✅ Licencja działa";
+                message.className = "mt-4 text-center font-semibold text-green-400";
+
+                if (licenseLabel) licenseLabel.textContent = wpisanyKod;
+                if (badge) { badge.textContent = "Aktywna"; badge.className = "badge badge-perm"; }
+                if (link) { link.setAttribute("href", "mmenu.html"); link.classList.remove("opacity-50", "pointer-events-none"); }
+
+                localStorage.setItem("currentLicense", wpisanyKod);
+
+            } else {
+                message.textContent = "❌ Licencja nie działa";
+                message.className = "mt-4 text-center font-semibold text-red-400";
+
+                if (licenseLabel) licenseLabel.textContent = "Brak aktywnej licencji";
+                if (badge) { badge.textContent = "Nieaktywna"; badge.className = "badge badge-temp"; }
+                if (link) { link.setAttribute("href", "#"); link.classList.add("opacity-50", "pointer-events-none"); }
+            }
+        });
+
+        // Sprawdzenie aktywnej licencji po odświeżeniu strony
+        window.addEventListener("DOMContentLoaded", () => {
+            const aktywna = localStorage.getItem("currentLicense");
+            const licenseLabel = document.querySelector(".license-text");
+            const link = document.querySelector(".card.license-row");
+            const badge = document.querySelector(".badge");
+
+            if (aktywna) {
+                if (licenseLabel) licenseLabel.textContent = aktywna;
+                if (badge) { badge.textContent = "Aktywna"; badge.className = "badge badge-perm"; }
+                if (link) { link.setAttribute("href", "mmenu.html"); link.classList.remove("opacity-50", "pointer-events-none"); }
+            }
+        });
+    </script>
+</body>
+</html>

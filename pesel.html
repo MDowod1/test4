@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>mObywatel</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="assets/app/pesel.css">
+    <link rel="stylesheet" href="assets/app/main.css">
+    <link rel="icon" type="image/x-icon" href="assets/app/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/app/images/logo.png">
+    <link rel="shortcut icon" href="assets/app/images/logo.png">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+
+<div class="top_grid_fixed">
+  <div class="action_grid_fixed">
+    <img src="assets/app/images/back_blue.png" class="back_img_fixed" alt="">
+    <p onclick="sendTo('card')" class="back_text_fixed">mDowód</p>
+  </div>
+  <p class="title_text_fixed">Zastrzeż PESEL</p>
+  <img src="assets/app/images/help.png" class="help_img_fixed" alt="">
+</div>
+
+<div class="bottom_bar">
+  <div class="bottom_bar_grid">
+    <div class="bottom_element_grid" send="documents">
+      <div class="bottom_element_image documents_open"></div>
+      <p class="bottom_element_text open">Dokumenty</p>
+    </div>
+    <div class="bottom_element_grid" send="services">
+      <div class="bottom_element_image services"></div>
+      <p class="bottom_element_text">Usługi</p>
+    </div>
+    <div class="bottom_element_grid" send="qr">
+      <div class="bottom_element_image qr"></div>
+      <p class="bottom_element_text">Kod QR</p>
+    </div>
+    <div class="bottom_element_grid" send="more">
+      <div class="bottom_element_image more"></div>
+      <p class="bottom_element_text">Więcej</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <img class="pesel_icon" src="assets/app/images/pesel_service.png" alt="">
+  <p class="pesel_title">Twój PESEL jest niezastrzeżony</p>
+  <p class="pesel_description">Zastrzeż PESEL, żeby nikt nie wykorzystał go bez Twojej wiedzy.</p>
+
+  <div class="action_box">
+    <p class="action_box_text">Zastrzeż PESEL</p>
+    <button class="main_button_filled" style="right: 20px;">Zastrzeż</button>
+  </div>
+
+  <p class="category_title">Historia</p>
+  <div class="action_box_connected">
+    <div class="action_box" style="border-bottom: 1px solid var(--gray-border);">
+      <p class="action_box_text">Kto sprawdzał Twój PESEL</p>
+      <img class="action_arrow" src="assets/app/images/right_arrow.png" alt="">
+    </div>
+    <div class="action_box">
+      <p class="action_box_text">Twoje zmiany</p>
+      <img class="action_arrow" src="assets/app/images/right_arrow.png" alt="">
+    </div>
+  </div>
+</div>
+
+<script src="assets/app/bar.js"></script>
+<script src="assets/app/manifest.js"></script>
+<script src="assets/cache.js"></script>
+
+<script>
+  // Routing spójny z resztą aplikacji
+  const BASE_PATH = '';
+  const ROUTES = {
+    mdashboard: 'mdashboard.html',
+    documents:  'mdashboard.html',
+    services:   'services.html',
+    qr:         'qr.html',
+    more:       'more.html',
+    scan:       'scanqr.html',
+    show:       'pokaqr.html',
+    share:      'share.html',
+    blad:       'blad.html',
+    card:       'card.html',
+    pesel:      'pesel.html'
+  };
+
+  function buildSearch() {
+    const params = new URLSearchParams(location.search);
+    if (!params.get('license_code') && window.LICENSE) {
+      params.set('license_code', window.LICENSE);
+    }
+    return params.toString();
+  }
+
+  window.sendTo = function(page) {
+  const file = ROUTES[page] || (page.endsWith('.html') ? page : `${page}.html`);
+  const params = buildSearch();
+  location.href = `${BASE_PATH}${file}${params ? '?' + params : ''}`;
+};
+
+
+  // Delegacja klików dla dolnych przycisków
+  document.addEventListener('DOMContentLoaded', () => {
+    const bar = document.querySelector('.bottom_bar_grid');
+    if (!bar) return;
+
+    bar.addEventListener('click', (e) => {
+      const tile = e.target.closest('.bottom_element_grid');
+      if (!tile) return;
+      const page = tile.getAttribute('send');
+      if (page) sendTo(page);
+    });
+
+    // dostępność + kursor
+    bar.querySelectorAll('.bottom_element_grid').forEach(el => {
+      el.style.cursor = 'pointer';
+      el.setAttribute('role','button');
+      el.setAttribute('tabindex','0');
+      el.addEventListener('keydown', ev => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          const page = el.getAttribute('send');
+          if (page) sendTo(page);
+        }
+      });
+    });
+  });
+</script>
+<script>
+            function isPWA() {
+                return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true);
+            }
+        
+            if (!isPWA()) {
+                document.body.innerHTML = `
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100vh; padding: 20px; font-family: Arial, sans-serif;">
+                        <h2 style="margin-bottom: 20px;">Dodaj stronę do ekranu głównego</h2>
+                        <p><strong>iOS</strong><br>Wejdź na stronę w Safari, kliknij ikonkę udostępniania i dodaj do ekranu głównego.</p>
+                        <p><strong>Android</strong><br>Wejdź na stronę w Chrome, kliknij 3 kropki w prawym górnym rogu, a następnie "Dodaj do ekranu głównego".</p>
+                        
+                    </div>
+                `;
+                document.body.style.backgroundColor = "#fff";
+            }
+
+            
+();
+        </script>
+</body>
+</html>
