@@ -108,7 +108,6 @@ body::before {
   display: block;
   border-radius: 0;
   background-color: #fdfdfd69;
-  filter: contrast(120%) brightness(1.1);
 }
 
 /* Nr legitymacji */
@@ -430,4 +429,5 @@ body::before {
 }
 
 .pesel-section { margin-top: 2px; }
+
 
