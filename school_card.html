@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<title>Legitymacja szkolna</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="assets/app/school_card.css">
+<script src="assets/app/school_card.js"></script>
+</head>
+<body>
+
+<!-- Topbar w stylu mObywatel -->
+ <div class="header-bg"></div>
+<header class="topbar">
+  <a href="mdashboard.html" class="back-button">Wróć</a>
+  <h1 class="title">Legitymacja szkolna</h1>
+  <div></div>
+</header>
+
+<div class="state">
+  <!-- Wstaw swój plik z godłem -->
+  <div class="eagle"><img src="assets/app/images/eagle.gif" alt="Godło">
+  <span class="country">RZECZPOSPOLITA<br>POLSKA</span>
+  </div>
+  <!-- Wstaw swój plik z flagą -->
+  <div class="flag"><img src="assets/app/images/flaga-ezgif.com-effects.gif" alt="Flaga"></div>
+</div>
+
+<div class="doc-header">
+  <div>Nr legitymacji: <span id="legit-number" class="bold"></span></div>
+  <div>Wydana: <span id="issue-date" class="bold"></span></div>
+</div>
+
+
+<div class="card">
+  <div class="photo">
+    <img src="assets/app/images/zdjecie_legitka.jpg" alt="Zdjęcie ucznia">
+  </div>
+
+  <div class="info-block">
+  <h2 class="full-name">JAN KOWALSKI<br>BRZECHWA</h2>
+  <div class="role">Uczeń</div>
+
+  <div class="field">
+    <div class="label">Data urodzenia:</div>
+    <div class="value">00.00.0000</div>
+  </div>
+
+  <div class="field">
+    <div class="label">PESEL:</div>
+    <div class="value">0000</div>
+  </div>
+</div>
+    <!-- Wiek w dolnym prawym rogu -->
+
+  <div class="age">0 lat</div>
+
+  <!-- tu wsadzamy napis do białej ramki -->
+  <div class="valid-inside">
+    <div class="left">Ważna</div>
+    <div class="right">Termin ważności<br><b>00.00.0000</b></div>
+  </div>
+</div>
+
+<!-- Sekcja rozwijana -->
+<div class="section" onclick="toggleSection()">
+  <div>Nazwa i adres szkoły</div>
+   <span id="arrow"><i class="fa-solid fa-chevron-down"></i></span>
+</div>
+
+<div class="section-content" id="school-info">
+TECHNIKUM ZAJEBISTOŚCI NR 5 IM. MAJORA<br>PAPIEŻA GDAŃSKIEGO W GDAŃSKU<br>
+<br>ul. Szkolna 17
+<div class="school-line">
+  00-000 Gdańsk <span class="green-number">+48000000000</span>
+</div>
+<br>Dyrektor szkoły: KONOPSKYY
+</div>
+
+<div class="info">
+  <br>Czas okazania: <b><span id="czas-okazania"></span></b><br><br>
+  Poświadcza,że do ulgowych przejazdów trzeba alkoholu i transportu zbiorowego samotnego i imprezowego.
+</div>
+
+<div class="footer-bar">
+  <a href="#" class="footer-item">
+    <i class="fa-solid fa-share-from-square"></i>
+    <span>Przekaż</span>
+  </a>
+  <a href="#" class="footer-item">
+    <i class="fa-solid fa-arrows-rotate"></i>
+    <span>Przedłuż ważność</span>
+  </a>
+  <a href="#" class="footer-item">
+    <i class="fa-solid fa-trash"></i>
+    <span>Usuń</span>
+  </a>
+</div>
+</body>
+</html>
